@@ -1,0 +1,12 @@
+[Unit]
+Description=An Automatic Whitelist for all Servers
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/minecraft
+ExecStart=/opt/minecraft/auto-whitelist.sh
+User=minecraft
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
