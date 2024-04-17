@@ -1,0 +1,9 @@
+[Unit]
+Description="Monitor SMP whitelist"
+
+[Path]
+PathModified=/opt/minecraft/smp/whitelist.json
+Unit=auto-whitelist.service
+
+[Install]
+WantedBy=multi-user.target
