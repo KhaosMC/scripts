@@ -27,6 +27,8 @@ for server in $servers; do
     if [ $total_backups -gt 48 ]; then
         backups_to_delete=$(ls -Art "$backup_dir/$server" | head -n $(( $total_backups - 48 )))
         echo "Found $($backups_to_delete | wc -l) backups to delete.."
-        rm $backups_to_delete
+        for backup in $backups_to_delete; do
+            rm "$backup_dir/$server/$backup"
+        done
     fi
 done
