@@ -23,7 +23,7 @@ for server in $servers; do
     
     echo "Finished backing up $server.."
     # Delete old backups
-    total_backups=$(ls "$backup_dir/$server" | wc -l)
+    total_backups=$(find "$backup_dir/$server/*" | wc -l)
     if [ $total_backups -gt 48 ]; then
         backups_to_delete=$(ls -Art | head -n $(( $total_backups - 48 )))
         echo "Found $backups_to_delete backups to delete.."
