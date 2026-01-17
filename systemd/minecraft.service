@@ -1,0 +1,32 @@
+[Unit]
+Description=A Minecraft Server
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+
+User=minecraft
+Group=minecraft
+
+WorkingDirectory=/path/to/server
+ExecStart=/path/to/server/start.sh
+ExecStop=/bin/bash -c "echo 'Server is shutting down..' >> /run/minecraft.stdin && echo stop >> /run/minecraft.stdin"
+ExecStop=/bin/bash -c "while ps -p $MAINPID > /dev/null; do /bin/sleep 1; done"
+
+Sockets=minecraft.socket
+StandardInput=socket
+StandardOutput=journal
+StandardError=journal
+
+ProtectSystem=full
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

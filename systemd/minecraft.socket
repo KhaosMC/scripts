@@ -1,0 +1,9 @@
+[Unit]
+PartOf=minecraft.service
+
+[Socket]
+SocketUser=minecraft
+ListenFIFO=%t/minecraft.stdin
+
+[Install]
+WantedBy=multi-user.target
