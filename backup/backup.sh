@@ -4,12 +4,17 @@
 # Written by: AI-nsley69
 # Dependencies: jq
 
-#
-backup_dir="$HOME/backups"
-retention_hours="24"
+# Crontab entry, under the user running the servers:
+# 0 * * * * path_to_script/backup.sh
 
+backup_dir="$HOME/backups" # Where to copy backups, can be used by mounting remote target to location
+mc_parent_dir="$HOME" # Location for minecraft servers
+retention_hours="24" # How long to keep hourly backups
+
+# Try to create the backup location incase it doesn't exist
 mkdir -p "$backup_dir"
 
+# Name of servers, should be the same as systemd name
 servers="smp cmp mirror velocity"
 for server in $servers; do
     # Skip inactive servers, incase a recovery is ongoing
@@ -33,7 +38,7 @@ for server in $servers; do
 
     # Create the archive but exclude the entire bluemap directory, since it's quite large and mostly a dupe of the world
     archive=$(date -u +%Y-%m-%dT%H:%M:%S)
-    tar cfz "$backup_dir/$server/hourly_$archive.tar.zst" -C "$HOME/$server" --exclude "./bluemap" .
+    tar cfz "$backup_dir/$server/hourly_$archive.tar.zst" -C "$mc_parent_dir/$server" --exclude "./bluemap" .
 
     # Announce once the world is backed up
     msg=$(jq -cnR '. = { "text": "\u00a75[Hourly Backup] \u00a7dFinished job in \($s) seconds", "bold": true }' --arg s "$seconds")
