@@ -6,6 +6,14 @@ mkdir -p "$backup_dir"
 
 servers="smp cmp mirror velocity"
 for server in $servers; do
+    # Skip inactive servers, incase a recovery is ongoing
+    # Changes should not be possible at this stage, and current backups will still be available
+    IS_ACTIVE=$(systemctl is-active "$server")
+    if [ IS_ACTIVE != "active" ]; then
+        echo "Skipping $server because it's offline"
+        continue
+    fi
+
     echo "Backing up $server.."
 
     # Announce that the backup job is starting, incase server perf degrades
